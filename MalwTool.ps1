@@ -321,7 +321,7 @@ $ActWinServer = New-Object System.Windows.Forms.RadioButton -Property @{
     Location = [System.Drawing.Point]::new(6, 81)
     Name = "WinServer"
     Size = [System.Drawing.Size]::new(193, 19)
-    Text = "Windows Server 2025/2022/2019/2016"
+    Text = "Win Server 2025/2022/2019/2016"
 }
 $tooltip.SetToolTip($ActWinServer, $strings[7])
 
