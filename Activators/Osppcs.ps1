@@ -21,5 +21,6 @@ if (Test-Path "$env:ProgramFiles\Microsoft Office\root\vfs\System") {
 Set-Location "$path\Office16"
 Get-ChildItem -Path "..\root\Licenses16\" -Filter "$($lics[$Product])*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:"$($_.FullName)" }
 cscript //nologo ospp.vbs /inpkey:$($keys[$Product])
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Name "TimeOfLastHeartbeatFailure" -Value "2040-01-01T00:00:00Z"
+New-Item -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Force | Out-Null
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Name "TimeOfLastHeartbeatFailure" -Value "2040-01-01T00:00:00Z" -Force
 pause
