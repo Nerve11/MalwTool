@@ -19,12 +19,12 @@ Set-Location $env:SystemRoot\System32
 ./cscript.exe //nologo slmgr.vbs /ipk CGK42-GYN6Y-VD22B-BX98W-J8JXD > $null # IoT Enterprise LTSC 2024
 ./cscript.exe //nologo slmgr.vbs /ipk VK7JG-NPHTM-C97JM-9MPGT-3V66T > $null # Pro
 
-New-Item -Path "$env:temp\MalwTool" -ItemType Directory > $null
+New-Item -Path "$env:temp\MalwTool" -ItemType Directory -ErrorAction SilentlyContinue > $null
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $wc = New-Object net.webclient
 $wc.DownloadFile('https://download.microsoft.com/download/9/A/E/9AE69DD5-BA93-44E0-864E-180F5E700AB4/adk/Installers/14f4df8a2a7fc82a4f415cf6a341415d.cab', "$env:temp\MalwTool\GOS.cab")
 ./expand.exe -f:filf8377e82b29deadca67bc4858ed3fba9 "$env:temp\MalwTool\GOS.cab" "$env:temp\MalwTool"
-Rename-Item -Path "$env:temp\MalwTool\filf8377e82b29deadca67bc4858ed3fba9" -NewName 'GOS.exe'
+Move-Item -Path "$env:temp\MalwTool\filf8377e82b29deadca67bc4858ed3fba9" -Destination "$env:temp\MalwTool\GOS.exe" -Force
 $f = [System.IO.File]::ReadAllBytes("$env:temp\MalwTool\GOS.exe")
 $f[320] = 0xf8
 $f[321] = 0xfb
@@ -100,6 +100,12 @@ $wver = (Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\ProductOptions)
 Set-Location $env:temp\MalwTool
 ./GOS.exe /c Pfn=$wver`;PKeyIID=465145217131314304264339481117862266242033457260311819664735280
 Set-Location $env:SystemRoot\System32
-./clipup.exe -v -o -altto $env:temp\MalwTool
+$comOutput = & ./clipup.exe -v -o -altto $env:temp\MalwTool 2>&1 | Out-String
+if ($comOutput -match "0 licenses converted out of 1") {
+    if ($PSUICulture -eq "ru-RU") {Write-Host "`n`nПохоже, активация через HWID не удалась! Попробуйте активацию через KMS!`n"}
+    else {Write-Host "`n`nLooks like HWID activation failed! Try activating via KMS!`n"}
+    pause
+    exit
+}
 ./cscript.exe //nologo slmgr.vbs /ato
 pause

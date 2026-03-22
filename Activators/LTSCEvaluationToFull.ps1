@@ -3,7 +3,7 @@ else {$host.ui.RawUI.WindowTitle = 'MalwTool — Converting Windows 10 LTSC Eval
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $wc = New-Object net.webclient
-New-Item -Path "$env:temp\MalwTool" -ItemType Directory > $null
+New-Item -Path "$env:temp\MalwTool" -ItemType Directory -ErrorAction SilentlyContinue > $null
 $wc.DownloadFile('https://archive.org/download/ltscevaluation-to-full/LTSCEvaluationToFull.zip', "$env:temp\MalwTool\LTSCEvaluationToFull.zip")
 Expand-Archive -Path "$env:temp\MalwTool\LTSCEvaluationToFull.zip" -DestinationPath "$env:SystemRoot\System32\spp\tokens\skus"
 Set-Location $env:SystemRoot\System32

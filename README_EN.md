@@ -9,7 +9,7 @@ powershell -command "irm https://raw.githubusercontent.com/ImMALWARE/MalwTool/ma
 ```
 Second, shortened command variant (simple redirect to the same GitHub from my website)
 ```pwsh
-powershell -command "irm https://malw.ru/dl/malwtool | iex"
+powershell -command "irm https://malw.link/dl/malwtool | iex"
 ```
 
 # Features

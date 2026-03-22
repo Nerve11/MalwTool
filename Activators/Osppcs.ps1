@@ -18,9 +18,19 @@ if (Test-Path "$env:ProgramFiles\Microsoft Office\root\vfs\System") {
     $wc.DownloadFile(("https://raw.githubusercontent.com/ImMALWARE/MalwTool/refs/heads/main/files/sppc32.d" + "ll"), ("$path\root\vfs\SystemX86\sppc.d" + "ll"))
 }
 
+if (-not (Test-Path "$path\Office16")) {
+    Write-Host "Folder Office16 is missing! Downloading it now..."
+    New-Item -Path "$env:temp\MalwTool" -ItemType Directory -ErrorAction SilentlyContinue > $null
+    $wc.DownloadFile('https://archive.org/download/office16_202502/Office16.zip', "$env:temp\MalwTool\Office16.zip")
+    New-Item -Path "$path\Office16" -ItemType Directory
+    Set-Location "$env:temp\MalwTool"
+    Expand-Archive .\Office16.zip -DestinationPath "$path\Office16"
+    Write-Host "Office16 folder downloaded"
+}
+
 Set-Location "$path\Office16"
 Get-ChildItem -Path "..\root\Licenses16\" -Filter "$($lics[$Product])*.xrm-ms" | ForEach-Object { cscript ospp.vbs /inslic:"$($_.FullName)" }
 cscript //nologo ospp.vbs /inpkey:$($keys[$Product])
-New-Item -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Force | Out-Null
+New-Item -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Force -ErrorAction SilentlyContinue > $null
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Office\16.0\Common\Licensing\Resiliency" -Name "TimeOfLastHeartbeatFailure" -Value "2040-01-01T00:00:00Z" -Force
 pause

@@ -7,7 +7,7 @@ elseIf (test-path "${env:ProgramFiles(x86)}\Microsoft Office\Office15\ospp.vbs")
     $path = "${env:ProgramFiles(x86)}\Microsoft Office\Office15"
 }
 
-New-Item -ItemType Directory -Path "$env:temp\MalwTool"
+New-Item -ItemType Directory -Path "$env:temp\MalwTool" -ErrorAction SilentlyContinue > $null
 Invoke-WebRequest -Uri "https://github.com/ImMALWARE/MalwTool/raw/main/files/Office_2013_Library.zip" -OutFile $env:temp\MalwTool\library.zip
 Expand-Archive -Path "$env:temp\MalwTool\library.zip" -DestinationPath "$env:temp\MalwTool\"
 Set-Location "$env:temp\MalwTool"
