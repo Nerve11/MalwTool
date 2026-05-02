@@ -1,4 +1,4 @@
-# https://github.com/ImMALWARE/MalwTool
+# https://github.com/ImMALWARE/MalwTool & https://github.com/Nerve11/MalwTool
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -Name Window -Namespace Console -MemberDefinition '[DllImport("Kernel32.dll")]public static extern IntPtr GetConsoleWindow();[DllImport("user32.dll")]public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);'
 [void][Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0)
@@ -13,234 +13,118 @@ $hidden = New-Object System.Windows.Forms.Form -Property @{
     WindowState = "Minimized"
 }
 
-if ($PSUICulture -eq "ru-RU") {
-    $strings = @{
-        tabs = @{
-            activation = "Активация"
-            download = "Скачивание"
-            other = "Другие функции"
-            problems = "Решение проблем"
-            info = "Информация"
-        }
-        act = @{
-            hwid = "Активация Windows 10 или 11 (в том числе LTSC) по HWID"
-            kms = "Активация Windows 10 или 11 (в том числе LTSC) через KMS"
-            evaluation = "Конвертировать пробную версию Windows 10 LTSC (Evaluation) в полноценную LTSC"
-            server = "Активация Windows Server 2025, Windows Server Standard, Windows Server Datacenter, 2022, 2019, 2016, 2012, 2012 R2, 1803, 1709"
-            visio = "Через KMS, будет активирован как %p% 2021 (более старые версии обновятся)"
-            office = "Активация Office %v% путём добавления файла sppc.dll$n" + "%info%" + "Активация сработает и для Office %otherv%. Office потом автоматически конвертируется в %v%."
-            o365info = "Office 365 — всегда самая актуальная версия Office, лучше выбрать этот вариант.$n"
-            o2024info = "И всё-таки, я бы порекомендовал выбрать Office 365.$n"
-            o2013 = "Активация Office 2013 с помощью добавления файла sppc.dll"
-            prism = "Разрешить создание автономного аккаунта Minecraft в Prism Launcher без добавления аккаунта Microsoft.$n" + "Не запускайте, если вы уже добавили аккаунт! Это действие удалит все аккаунты в лаунчере!"
-            tl = "Премиум-аккаунт в TL, вы сможете отключить добавление рекламных серверов в его настройках"
-            act = "Активировать!"
-            notfound = "%p% не найден!"
-        }
-        mc = @{
-            prismok = "Автономный аккаунт в Prism Launcher разблокирован!"
-            tlok = "Premium аккаунт в TL активирован! Теперь зайдите в настройки TL для отключения рекламных серверов!"
-            tlnoacc = "Сначала войдите в аккаунт в TL!"
-        }
-        download = @{
-            windows = "ISO образ последней версии Windows %v% с официального сайта Microsoft"
-            oonline = "Онлайн-установщик Office с официального сайта Microsoft."
-            installer = " Следуйте инструкциям $app после запуска установщика."
-            oiso = "ISO архив Office с официального сайта Microsoft. Запустите в нём setup.exe"
-            outdated = "Не рекомендуется, устаревшая версия. "
-            rufus = "инструмент для записи ISO образов на флешку"
-            linkfail = "Не удалось получить ссылку для загрузки!$n" + "Если повторение не помогло несколько раз, вы можете скачать перезалив с Archive.org"
-            btn_retry = "Повторить"
-            btn_reupload = "Скачать перезалив"
-            btn_cancel = "Отмена"
-            recommended = "рекомендуется"
-            bypass = 'Для онлайн-установки нужно обойти ограничения. Для этого: запустите exe-файл, дождитесь ошибки "Сбой установки", нажмите "Да" в этом окне. После этого перезапустите файл установщика!'
-            bypass_done = "Теперь снова запустите установщик Office!"
-        }
-        functions = @{
-            wifi = "Узнать пароли от сохранённых Wi-Fi сетей"
-            wifi_desc = "Перед запуском убедитесь, что Wi-Fi сейчас включен"
-            install = "Установить "
-            fileext = "Отображать расширения файлов в проводнике"
-            store_desc = "Для LTSC-версий Windows без установленного Microsoft Store"
-            store_installing = "Microsoft Store устанавливается! Подождите пару минут, он должен появиться в Пуске!"
-            drivers = "Резервное копирование драйверов"
-            drivers_desc = 'Перед переустановкой Windows лучше сделать резервную копию всех драйверов, чтобы потом не мучаться с ними после переустановки, а просто выбрать "Восстановление" здесь.'
-            drivers_restore = "Восстановление драйверов"
-            drivers_select = "Выберите папку для создания/восстановления резервной копии драйверов"
-            edge = "Полностью удалить Microsoft Edge"
-            compattel = "Удалить шпионские файлы"
-            compattel_desc = "Удалить CompatTelRunner.exe и wsqmcons.exe"
-            compattel_title = "Удаление CompatTelRunner.exe и wsqmcons.exe"
-            spicetify_desc = "Модификация приложения Spotify"
-            hosts = "Обойти блокировки через hosts"
-            hosts_desc = "Установить hosts файл из dns.malw.link$n" + "Будут работать ChatGPT, Gemini, NotebookLM, Copilot, Spotify, Codeium, GitHub Copilot, Claude, Notion, Canva, TikTok и многое другое$n" + "Подробнее на info.dns.malw.link"
-            hosts_title = "Редактирую файл hosts"
-        }
-        problems = @{
-            cl_o16 = "Очистить лицензии Office16"
-            cl_o16_desc = "Только для KMS активации. Не очистит активацию от $app."
-            cl_o16_err = "Папка Office16 не найдена!"
-            cl_o16_title = "Убираю лицензии Office16"
-            o16_folder = "Отсутствует папка Office16"
-            o16_exists = "Папка Office16 существует!"
-            o16_title = "Скачиваю папку Office16"
-            ouninstall = "Инструмент удаления Office"
-            cl_win = "Сброс KMS активации Windows"
-            cl_win_title = "Очищаю активацию Windows"
-            sfc = "Проверить системные файлы на целостность"
-            sfc_shutdown_desc = "Через 60 секунд будет перезагрузка для проверки системного диска!"
-            sfc_title = "Проверка системы"
-            sfc_note = "⚠!!! Сейчас нажмите Y и Enter для проверки диска!!!"
-            other = "У меня другая проблема!"
-            other_desc = "Даже если проблема не связана с $app, всё равно напишите"
-            ouninstall_nogethelp = "Вы должны установить приложение Техническая поддержка для этой функции. Установите и запустите функцию заново."
-            nostore = "Вы должны установить приложение Техническая поддержка для этой функции. Но для его установки нужен Microsoft Store. Установите его на вкладке Другие функции."
-        }
-        info = @{
-            wiki = "Страница на Wiki.malw.link"
-            lolz = "Тема на Lolzteam"
-            questions = "Есть вопросы? "
-            telegram = "Написать в Telegram"
-            lolz_write = "Написать в теме Lolzteam"
-            github = "Написать в GitHub Issues"
-        }
-        links = @{
-            w10ltsc = "https://archive.org/download/windows10_ltsc_2021_ru/ru-ru_windows_10_enterprise_ltsc_2021_x64_dvd_5044a1e7.iso"
-            w11ltsc = "https://archive.org/download/windows11_ltsc_2024_ru/ru-ru_windows_11_enterprise_ltsc_2024_x64_dvd_f9af5773.iso"
-            ws2025 = "https://archive.org/download/ru-ru_windows_server_2025_updated_march_2026_x64_dvd_8e06425a/ru-ru_windows_server_2025_updated_march_2026_x64_dvd_8e06425a.iso"
-            ws2022 = "https://archive.org/download/ru-ru_windows_server_2022_updated_march_2026_x64_dvd_3f772967/ru-ru_windows_server_2022_updated_march_2026_x64_dvd_3f772967.iso"
-            ws2019 = "https://archive.org/download/ru-ru_windows_server_2019_x64_dvd_e02b76ba/ru-ru_windows_server_2019_x64_dvd_e02b76ba.iso"
-            w81 = "https://archive.org/download/windows8_1_ru/Win8.1_Russian_x64.iso"
-            o2024o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2024Retail&platform=x64&language=ru-ru&version=O16GA"
-            o2024i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/ru-ru/ProPlus2024Retail.img"
-            o2021o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2021Retail&platform=x64&language=ru-ru&version=O16GA"
-            o2021i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/ru-ru/ProPlus2021Retail.img"
-            o2019o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2019Retail&platform=x64&language=ru-ru&version=O16GA"
-            o2019i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/ru-ru/ProPlus2019Retail.img"
-            o2016o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=ru-ru&version=O16GA"
-            o2016i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/ru-ru/ProPlusRetail.img"
-            o2013o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=ru-ru&version=O15GA"
-            o2013i = "https://officecdn.microsoft.com/db/39168d7e-077b-48e7-872c-b232c3e72675/media/ru-ru/ProfessionalRetail.img"
-            vis2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/VisioPro2024Retail.img"
-            proj2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProjectPro2024Retail.img"
-        }
+$strings = @{
+    tabs = @{
+        activation = "Activation"
+        download = "Download"
+        other = "Other functions"
+        problems = "Troubleshooting"
+        info = "Info"
     }
-} else {
-    $strings = @{
-        tabs = @{
-            activation = "Activation"
-            download = "Download"
-            other = "Other functions"
-            problems = "Troubleshooting"
-            info = "Info"
-        }
-        act = @{
-            hwid = "Windows 10 or 11 (including LTSC) activation by HWID"
-            kms = "Windows 10 or 11 (including LTSC) activation via KMS"
-            evaluation = "Convert evaluation version of Windows 10 LTSC to full LTSC"
-            server = "Activation of Windows Server 2025, Windows Server Standard, Windows Server Datacenter, 2022, 2019, 2016, 2012, 2012 R2, 1803, 1709"
-            visio = "Via KMS, will be activated as %p% 2021 (older versions will be updated)"
-            office = "Office %v% activation via sppc.dll file$n" + "%info%" + "The activation will also work for Office %otherv%. Office will then be automatically converted to %v%."
-            o365info = "Office 365 is always the latest version of Office, it is better to choose this option.$n"
-            o2024info = "Anyway, I would recommend selecting Office 365.$n"
-            o2013 = "Office 2013 activation via sppc.dll file."
-            prism = "Allow creation of an offline Minecraft account in Prism Launcher without Microsoft account.$n" + "Do not start if you have already added an account! This action will delete all accounts in the launcher!"
-            tl = "Premium account in TL, you will be able to disable adding advertised servers in its settings"
-            act = "Activate!"
-            notfound = "%p% not found!"
-        }
-        mc = @{
-            prismok = "Offline account in Prism Launcher unlocked!"
-            tlok = "Premium account in TL is activated! Now open its settings to disable advertised servers!"
-            tlnoacc = "Log in to account in TL first!"
-        }
-        download = @{
-            windows = "ISO image of the latest version of Windows %v% from the official Microsoft website"
-            oonline = "Office online installer from the official Microsoft website."
-            installer = " Follow the instructions of $app after starting the installer."
-            oiso = "ISO archive of Office from the official Microsoft website. Run setup.exe in it."
-            outdated = " Not recommended, outdated version. "
-            rufus = "tool for writing ISO images to a flash drive"
-            linkfail = "Failed to get a download link!$n" + "If retrying didn't help after several times, you can download reupload from Archive.org"
-            btn_retry = "Retry"
-            btn_reupload = "Download reupload"
-            btn_cancel = "Cancel"
-            recommended = "recommended"
-            bypass = 'For users in Russia: To install online, you need to bypass regional restrictions. To do this, run the .exe file, wait for the "Command not supported" error, and click "Yes" in that window. After this, restart the installer file. If you are not in Russia, click "No".'
-            bypass_done = "Now start the installer again!"
-        }
-        functions = @{
-            wifi = "Get passwords from saved Wi-Fi networks"
-            wifi_desc = "Before starting, make sure that Wi-Fi is currently enabled"
-            install = "Install "
-            fileext = "Show file extensions in the explorer"
-            store_desc = "For LTSC versions of Windows without installed Microsoft Store"
-            store_installing = "Microsoft Store is installing! Wait a few minutes, it will appear in Start!"
-            drivers = "Backup drivers"
-            drivers_desc = 'Before reinstalling Windows, it''s best to back up all drivers so you don''t have to struggle with them afterward — just select "restore" here.'
-            drivers_restore = "Restore drivers"
-            drivers_select = "Select directory for creating/restoring drivers backup"
-            edge = "Completely uninstall Microsoft Edge"
-            compattel = "Delete system spy programs"
-            compattel_desc = "Delete CompatTelRunner.exe and wsqmcons.exe"
-            compattel_title = "Deleting CompatTelRunner.exe and wsqmcons.exe"
-            spicetify_desc = "Spotify mod"
-            hosts = "Bypass geo-blocks via hosts"
-            hosts_desc = "For russian people only! Set hosts file from dns.malw.link$n" + "More info at info.dns.malw.link"
-            hosts_title = "Editing hosts file"
-        }
-        problems = @{
-            cl_o16 = "Clear Office16 licenses"
-            cl_o16_desc = "Only for KMS activations. Won't clear activation from $app."
-            cl_o16_err = "Office16 folder not found!"
-            cl_o16_title = "Clearing Office16 licenses"
-            o16_folder = "Office16 folder is missing"
-            o16_exists = "Folder Office16 already exists!"
-            o16_title = "Downloading Office16 folder"
-            ouninstall = "Office removal tool"
-            cl_win = "Clear Windows KMS activation"
-            cl_win_title = "Clearing Windows activation"
-            sfc = "Check system files for integrity"
-            sfc_shutdown_desc = "In 60 seconds there will be a reboot to check the system disk!"
-            sfc_title = "Checking system"
-            sfc_note = "⚠!!! Now press Y and Enter for checking disk!!!"
-            other = "I have another problem!"
-            other_desc = "Contact me, even if the problem is unrelated to $app"
-            ouninstall_nogethelp = "You must install Get Help app for this function! Install and and run again."
-            nostore = "You must install Get Help app for this function. But to install it, you need Microsoft Store. Install it in the Other functions tab."
-        }
-        info = @{
-            wiki = "Page on Wiki.malw.link"
-            lolz = "Lolzteam thread"
-            questions = "Questions? "
-            telegram = "Message in Telegram"
-            lolz_write = "Write in Lolzteam thread"
-            github = "Write on GitHub Issues"
-        }
-        links = @{
-            w10ltsc = "https://archive.org/download/en-us_windows_10_iot_enterprise_ltsc_2021_x64_dvd_257ad90f_20260322/en-us_windows_10_iot_enterprise_ltsc_2021_x64_dvd_257ad90f.iso"
-            w11ltsc = "https://archive.org/download/en-us_windows_11_iot_enterprise_ltsc_2024_x64_dvd_f6b14814_202603/en-us_windows_11_iot_enterprise_ltsc_2024_x64_dvd_f6b14814.iso"
-            ws2025 = "https://archive.org/download/en-us_windows_server_2025_updated_march_2026_x64_dvd_8e06425a/en-us_windows_server_2025_updated_march_2026_x64_dvd_8e06425a.iso"
-            ws2022 = "https://archive.org/download/en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967/en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967.iso"
-            ws2019 = "https://archive.org/download/en-us_windows_server_2019_x64_dvd_f9475476_202603/en-us_windows_server_2019_x64_dvd_f9475476.iso"
-            w81 = "https://archive.org/download/en_windows_8.1_with_update_x64_dvd_6051480_202603/en_windows_8.1_with_update_x64_dvd_6051480.iso"
-            o2024o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2024Retail&platform=x64&language=en-us&version=O16GA"
-            o2024i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2024Retail.img"
-            o2021o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2021Retail&platform=x64&language=en-us&version=O16GA"
-            o2021i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2021Retail.img"
-            o2019o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2019Retail&platform=x64&language=en-us&version=O16GA"
-            o2019i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2019Retail.img"
-            o2016o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=en-us&version=O16GA"
-            o2016i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlusRetail.img"
-            o2013o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=en-us&version=O15GA"
-            o2013i = "https://officecdn.microsoft.com/db/39168d7e-077b-48e7-872c-b232c3e72675/media/en-us/ProfessionalRetail.img"
-            vis2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/VisioPro2024Retail.img"
-            proj2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProjectPro2024Retail.img"
-        }
+    act = @{
+        hwid = "Windows 10 or 11 (including LTSC) activation by HWID"
+        kms = "Windows 10 or 11 (including LTSC) activation via KMS"
+        evaluation = "Convert evaluation version of Windows 10 LTSC to full LTSC"
+        server = "Activation of Windows Server 2025, Windows Server Standard, Windows Server Datacenter, 2022, 2019, 2016, 2012, 2012 R2, 1803, 1709"
+        visio = "Via KMS, will be activated as %p% 2021 (older versions will be updated)"
+        office = "Office %v% activation via sppc.dll file$n" + "%info%" + "The activation will also work for Office %otherv%. Office will then be automatically converted to %v%."
+        o365info = "Office 365 is always the latest version of Office, it is better to choose this option.$n"
+        o2024info = "Anyway, I would recommend selecting Office 365.$n"
+        o2013 = "Office 2013 activation via sppc.dll file."
+        prism = "Allow creation of an offline Minecraft account in Prism Launcher without Microsoft account.$nDo not start if you have already added an account! This action will delete all accounts in the launcher!"
+        tl = "Premium account in TL, you will be able to disable adding advertised servers in its settings"
+        act = "Activate!"
+        notfound = "%p% not found!"
+    }
+    mc = @{
+        prismok = "Offline account in Prism Launcher unlocked!"
+        tlok = "Premium account in TL is activated! Now open its settings to disable advertised servers!"
+        tlnoacc = "Log in to account in TL first!"
+    }
+    download = @{
+        windows = "ISO image of the latest version of Windows %v% from the official Microsoft website"
+        oonline = "Office online installer from the official Microsoft website."
+        installer = " Follow the instructions of $app after starting the installer."
+        oiso = "ISO archive of Office from the official Microsoft website. Run setup.exe in it."
+        outdated = " Not recommended, outdated version. "
+        rufus = "tool for writing ISO images to a flash drive"
+        linkfail = "Failed to get a download link!$nIf retrying did not help after several tries, you can download a reupload from Archive.org"
+        btn_retry = "Retry"
+        btn_reupload = "Download reupload"
+        btn_cancel = "Cancel"
+        recommended = "recommended"
+        bypass = 'For users in Russia: To install online, you need to bypass regional restrictions. Run the .exe file, wait for the "Command not supported" error, and click "Yes" in that window. Then restart the installer file. If you are not in Russia, click "No".'
+        bypass_done = "Now start the installer again!"
+    }
+    functions = @{
+        wifi = "Get passwords from saved Wi-Fi networks"
+        wifi_desc = "Before starting, make sure that Wi-Fi is currently enabled"
+        install = "Install "
+        fileext = "Show file extensions in Explorer"
+        store_desc = "For LTSC versions of Windows without installed Microsoft Store"
+        store_installing = "Microsoft Store is installing! Wait a few minutes; it should appear in Start."
+        drivers = "Backup drivers"
+        drivers_desc = 'Before reinstalling Windows, it is best to back up all drivers so you do not have to struggle with them afterward - just select "Restore" here.'
+        drivers_restore = "Restore drivers"
+        drivers_select = "Select directory for creating/restoring drivers backup"
+        edge = "Completely uninstall Microsoft Edge"
+        compattel = "Delete system spy programs"
+        compattel_desc = "Delete CompatTelRunner.exe and wsqmcons.exe"
+        compattel_title = "Deleting CompatTelRunner.exe and wsqmcons.exe"
+        spicetify_desc = "Spotify mod"
+        hosts = "Bypass geo-blocks via hosts"
+        hosts_desc = "For Russian users only. Set hosts file from dns.malw.link$nMore info at info.dns.malw.link"
+        hosts_title = "Editing hosts file"
+    }
+    problems = @{
+        cl_o16 = "Clear Office16 licenses"
+        cl_o16_desc = "Only for KMS activations. Won't clear activation from $app."
+        cl_o16_err = "Office16 folder not found!"
+        cl_o16_title = "Clearing Office16 licenses"
+        o16_folder = "Office16 folder is missing"
+        o16_exists = "Folder Office16 already exists!"
+        o16_title = "Downloading Office16 folder"
+        ouninstall = "Office removal tool"
+        cl_win = "Clear Windows KMS activation"
+        cl_win_title = "Clearing Windows activation"
+        sfc = "Check system files for integrity"
+        sfc_shutdown_desc = "In 60 seconds there will be a reboot to check the system disk!"
+        sfc_title = "Checking system"
+        sfc_note = "!!! Now press Y and Enter for checking disk!!!"
+        other = "I have another problem!"
+        other_desc = "Contact me, even if the problem is unrelated to $app"
+        ouninstall_nogethelp = "You must install Get Help app for this function! Install it and run again."
+        nostore = "You must install Get Help app for this function. But to install it, you need Microsoft Store. Install it in the Other functions tab."
+    }
+    info = @{
+        wiki = "Page on Wiki.malw.link"
+        lolz = "Lolzteam thread"
+        questions = "Questions? "
+        telegram = "Message in Telegram"
+        lolz_write = "Write in Lolzteam thread"
+        github = "Write on GitHub Issues"
+    }
+    links = @{
+        w10ltsc = "https://archive.org/download/en-us_windows_10_iot_enterprise_ltsc_2021_x64_dvd_257ad90f_20260322/en-us_windows_10_iot_enterprise_ltsc_2021_x64_dvd_257ad90f.iso"
+        w11ltsc = "https://archive.org/download/en-us_windows_11_iot_enterprise_ltsc_2024_x64_dvd_f6b14814_202603/en-us_windows_11_iot_enterprise_ltsc_2024_x64_dvd_f6b14814.iso"
+        ws2025 = "https://archive.org/download/en-us_windows_server_2025_updated_march_2026_x64_dvd_8e06425a/en-us_windows_server_2025_updated_march_2026_x64_dvd_8e06425a.iso"
+        ws2022 = "https://archive.org/download/en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967/en-us_windows_server_2022_updated_march_2026_x64_dvd_3f772967.iso"
+        ws2019 = "https://archive.org/download/en-us_windows_server_2019_x64_dvd_f9475476_202603/en-us_windows_server_2019_x64_dvd_f9475476.iso"
+        w81 = "https://archive.org/download/en_windows_8.1_with_update_x64_dvd_6051480_202603/en_windows_8.1_with_update_x64_dvd_6051480.iso"
+        o2024o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2024Retail&platform=x64&language=en-us&version=O16GA"
+        o2024i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2024Retail.img"
+        o2021o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2021Retail&platform=x64&language=en-us&version=O16GA"
+        o2021i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2021Retail.img"
+        o2019o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlus2019Retail&platform=x64&language=en-us&version=O16GA"
+        o2019i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2019Retail.img"
+        o2016o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=en-us&version=O16GA"
+        o2016i = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlusRetail.img"
+        o2013o = "https://c2rsetup.officeapps.live.com/c2r/download.aspx?ProductreleaseID=ProPlusRetail&platform=x64&language=en-us&version=O15GA"
+        o2013i = "https://officecdn.microsoft.com/db/39168d7e-077b-48e7-872c-b232c3e72675/media/en-us/ProfessionalRetail.img"
+        vis2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/VisioPro2024Retail.img"
+        proj2024 = "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProjectPro2024Retail.img"
     }
 }
-
 $gstrings = @("irm https://raw.githubusercontent.com/ImMALWARE/$app/main/Activators", " | iex", "$env:ProgramFiles\Microsoft Office\root\vfs\System", "${env:ProgramFiles(x86)}\Microsoft Office\root\vfs\SystemX86")
 $activators = @{"Win10" = "HWID.ps1"; "WinKM" = ("KM" + "S10.ps1"); "ConvertEvaluationToFull" = "LTSCEvaluationToFull.ps1"; "WinServer" = ("ServerKM" + "S.ps1"); "OfficeVisio" = "VisioProject.ps1"; "OfficeProject" = "VisioProject.ps1"; "MobaXterm" = "MXT.ps1"; "Office 365" = "Osppcs.ps1"; "Office 2024" = "Osppcs.ps1"; "Office 2021" = "Osppcs.ps1"; "Office 2019" = "Osppcs.ps1"; "Office 2016" = "Osppcs.ps1"; "Office 2013" = ("KM" + "S2013.ps1")}
 $paths = @{"Office 365" = @($gstrings[2], $gstrings[3]); "Office 2024" = @($gstrings[2], $gstrings[3]); "Office 2021" = @($gstrings[2], $gstrings[3]); "Office 2019" = @($gstrings[2], $gstrings[3]); "Office 2016" = @($gstrings[2], $gstrings[3]); "Office 2013" = @("$env:ProgramFiles\Microsoft Office 15\root\vfs\System", "${env:ProgramFiles(x86)}\Microsoft Office 15\root\vfs\System"); "Prism Launcher" = @("$env:appdata\PrismLauncher"); "TL" = @("$env:appdata\.minecraft\TlauncherProfiles.json"); "MobaXterm" = @("${env:ProgramFiles(x86)}\Mobatek\MobaXterm\version.dat")}
@@ -255,57 +139,218 @@ function check_path ($paths, $prod) {
     return $false
 }
 
+$theme = @{
+    formBack = [System.Drawing.ColorTranslator]::FromHtml('#F3F5F9')
+    surface = [System.Drawing.Color]::White
+    surfaceAlt = [System.Drawing.ColorTranslator]::FromHtml('#EEF2FF')
+    surfaceMuted = [System.Drawing.ColorTranslator]::FromHtml('#F8FAFC')
+    border = [System.Drawing.ColorTranslator]::FromHtml('#D7DFEA')
+    borderStrong = [System.Drawing.ColorTranslator]::FromHtml('#C4D0E3')
+    accent = [System.Drawing.ColorTranslator]::FromHtml('#2563EB')
+    accentSoft = [System.Drawing.ColorTranslator]::FromHtml('#DBEAFE')
+    text = [System.Drawing.ColorTranslator]::FromHtml('#0F172A')
+    textMuted = [System.Drawing.ColorTranslator]::FromHtml('#475569')
+    textSoft = [System.Drawing.ColorTranslator]::FromHtml('#64748B')
+    tabIdle = [System.Drawing.ColorTranslator]::FromHtml('#E8EEF8')
+    tabActive = [System.Drawing.Color]::White
+    success = [System.Drawing.ColorTranslator]::FromHtml('#16A34A')
+}
+
+function Set-ButtonTheme {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [switch]$Primary
+    )
+
+    $Button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $Button.FlatAppearance.BorderSize = 0
+    $Button.UseVisualStyleBackColor = $false
+    $Button.Cursor = [System.Windows.Forms.Cursors]::Hand
+    $Button.ForeColor = [System.Drawing.Color]::White
+    $Button.BackColor = if ($Primary) { $theme.accent } else { $theme.textMuted }
+}
+
+function Set-RadioTheme {
+    param([System.Windows.Forms.RadioButton]$Radio)
+
+    $Radio.ForeColor = $theme.text
+    $Radio.BackColor = $theme.surface
+    $Radio.Cursor = [System.Windows.Forms.Cursors]::Hand
+}
+
+function New-SectionPanel {
+    param(
+        [int]$X,
+        [int]$Y,
+        [int]$Width,
+        [int]$Height,
+        [string]$Title,
+        [string]$Subtitle = ''
+    )
+
+    $panel = New-Object System.Windows.Forms.Panel -Property @{
+        Location = [System.Drawing.Point]::new($X, $Y)
+        Size = [System.Drawing.Size]::new($Width, $Height)
+        BackColor = $theme.surface
+        BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+    }
+
+    $titleLabel = New-Object System.Windows.Forms.Label -Property @{
+        AutoSize = $true
+        Location = [System.Drawing.Point]::new(16, 14)
+        Font = [System.Drawing.Font]::new('Segoe UI Semibold', 11)
+        ForeColor = $theme.text
+        Text = $Title
+        BackColor = $theme.surface
+    }
+    $panel.Controls.Add($titleLabel)
+
+    if ($Subtitle) {
+        $subtitleLabel = New-Object System.Windows.Forms.Label -Property @{
+            Location = [System.Drawing.Point]::new(16, 38)
+            Size = [System.Drawing.Size]::new($Width - 32, 32)
+            Font = [System.Drawing.Font]::new('Segoe UI', 8.5)
+            ForeColor = $theme.textSoft
+            Text = $Subtitle
+            BackColor = $theme.surface
+        }
+        $panel.Controls.Add($subtitleLabel)
+    }
+
+    return $panel
+}
+
+function New-BodyLabel {
+    param(
+        [int]$X,
+        [int]$Y,
+        [int]$Width,
+        [int]$Height,
+        [string]$Text,
+        [float]$FontSize = 8.5,
+        [System.Drawing.Color]$ForeColor = $theme.textMuted
+    )
+
+    return (New-Object System.Windows.Forms.Label -Property @{
+        Location = [System.Drawing.Point]::new($X, $Y)
+        Size = [System.Drawing.Size]::new($Width, $Height)
+        Font = [System.Drawing.Font]::new('Segoe UI', $FontSize)
+        ForeColor = $ForeColor
+        Text = $Text
+        BackColor = [System.Drawing.Color]::Transparent
+    })
+}
+
 $form = New-Object System.Windows.Forms.Form -Property @{
     StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
     FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
     MaximizeBox = $false
     Text = $app
-    ClientSize = [System.Drawing.Size]::new(627, 234)
-    Font = [System.Drawing.Font]::new('Segoe UI', 8.5)
+    ClientSize = [System.Drawing.Size]::new(980, 700)
+    MinimumSize = [System.Drawing.Size]::new(996, 739)
+    MaximumSize = [System.Drawing.Size]::new(996, 739)
+    Font = [System.Drawing.Font]::new('Segoe UI', 9)
+    BackColor = $theme.formBack
 }
 
+$headerPanel = New-Object System.Windows.Forms.Panel -Property @{
+    Location = [System.Drawing.Point]::new(20, 18)
+    Size = [System.Drawing.Size]::new(940, 72)
+    BackColor = $theme.surface
+    BorderStyle = [System.Windows.Forms.BorderStyle]::FixedSingle
+}
+
+$headerTitle = New-Object System.Windows.Forms.Label -Property @{
+    AutoSize = $true
+    Location = [System.Drawing.Point]::new(20, 16)
+    Font = [System.Drawing.Font]::new('Segoe UI Semibold', 17)
+    ForeColor = $theme.text
+    Text = $app
+    BackColor = $theme.surface
+}
+
+$headerSubtitle = New-Object System.Windows.Forms.Label -Property @{
+    AutoSize = $true
+    Location = [System.Drawing.Point]::new(22, 45)
+    Font = [System.Drawing.Font]::new('Segoe UI', 9)
+    ForeColor = $theme.textMuted
+    Text = 'Refreshed interface with the same features: activation, downloads, recovery, and utilities.'
+    BackColor = $theme.surface
+}
+
+$headerBadge = New-Object System.Windows.Forms.Label -Property @{
+    AutoSize = $true
+    Location = [System.Drawing.Point]::new(876, 25)
+    Padding = [System.Windows.Forms.Padding]::new(10, 4, 10, 4)
+    Font = [System.Drawing.Font]::new('Segoe UI Semibold', 9)
+    ForeColor = $theme.accent
+    BackColor = $theme.accentSoft
+    Text = '2.0'
+}
+
+$headerPanel.Controls.AddRange(@($headerTitle, $headerSubtitle, $headerBadge))
+
 $tabs = New-Object System.Windows.Forms.TabControl -Property @{
-    Dock = [System.Windows.Forms.DockStyle]::Fill
-    Location = [System.Drawing.Point]::new(0, 0)
+    Location = [System.Drawing.Point]::new(20, 105)
     SelectedIndex = 0
-    Size = [System.Drawing.Size]::new(627, 234)
-    SizeMode = [System.Windows.Forms.TabSizeMode]::FillToRight
+    Size = [System.Drawing.Size]::new(940, 575)
+    SizeMode = [System.Windows.Forms.TabSizeMode]::Fixed
+    ItemSize = [System.Drawing.Size]::new(180, 34)
+    DrawMode = [System.Windows.Forms.TabDrawMode]::OwnerDrawFixed
+    Padding = [System.Drawing.Point]::new(14, 6)
+    Appearance = [System.Windows.Forms.TabAppearance]::Normal
 }
 
 $ActTab = New-Object System.Windows.Forms.TabPage -Property @{
-    Location = [System.Drawing.Point]::new(4, 24)
-    Padding = [System.Windows.Forms.Padding]::new(3)
-    Size = [System.Drawing.Size]::new(619, 206)
+    Padding = [System.Windows.Forms.Padding]::new(0)
     Text = $strings.tabs.activation
+    BackColor = $theme.formBack
 }
 
 $DlTab = New-Object System.Windows.Forms.TabPage -Property @{
-    Location = [System.Drawing.Point]::new(4, 24)
-    Padding = [System.Windows.Forms.Padding]::new(3)
-    Size = [System.Drawing.Size]::new(619, 206)
+    Padding = [System.Windows.Forms.Padding]::new(0)
     Text = $strings.tabs.download
+    BackColor = $theme.formBack
 }
 
 $FunctionsTab = New-Object System.Windows.Forms.TabPage -Property @{
-    Location = [System.Drawing.Point]::new(4, 24)
-    Size = [System.Drawing.Size]::new(619, 206)
     Text = $strings.tabs.other
+    BackColor = $theme.formBack
 }
 
 $ProblemsTab = New-Object System.Windows.Forms.TabPage -Property @{
-    Location = [System.Drawing.Point]::new(4, 24)
-    Padding = [System.Windows.Forms.Padding]::new(3)
-    Size = [System.Drawing.Size]::new(619, 206)
+    Padding = [System.Windows.Forms.Padding]::new(0)
     Text = $strings.tabs.problems
+    BackColor = $theme.formBack
 }
 
 $InfoTab = New-Object System.Windows.Forms.TabPage -Property @{
-    Location = [System.Drawing.Point]::new(4, 24)
-    Size = [System.Drawing.Size]::new(619, 206)
     Text = $strings.tabs.info
+    BackColor = $theme.formBack
 }
 
 @($ActTab, $DlTab, $FunctionsTab, $ProblemsTab, $InfoTab) | ForEach-Object { $tabs.TabPages.Add($_) }
+
+$tabs.Add_DrawItem({
+    param($sender, $e)
+
+    $rect = $e.Bounds
+    $selected = ($e.State -band [System.Windows.Forms.DrawItemState]::Selected) -eq [System.Windows.Forms.DrawItemState]::Selected
+    $bgBrush = New-Object System.Drawing.SolidBrush($(if ($selected) { $theme.tabActive } else { $theme.tabIdle }))
+    $textColor = if ($selected) { $theme.text } else { $theme.textMuted }
+
+    $e.Graphics.FillRectangle($bgBrush, $rect)
+    $bgBrush.Dispose()
+    $textRect = [System.Drawing.Rectangle]::new($rect.X, $rect.Y + 1, $rect.Width, $rect.Height - 2)
+    [System.Windows.Forms.TextRenderer]::DrawText(
+        $e.Graphics,
+        $sender.TabPages[$e.Index].Text,
+        [System.Drawing.Font]::new('Segoe UI Semibold', 9),
+        $textRect,
+        $textColor,
+        [System.Windows.Forms.TextFormatFlags]::HorizontalCenter -bor [System.Windows.Forms.TextFormatFlags]::VerticalCenter
+    )
+})
 
 $tooltip = New-Object System.Windows.Forms.ToolTip -Property @{
     AutoPopDelay = 5000
@@ -316,149 +361,204 @@ $tooltip = New-Object System.Windows.Forms.ToolTip -Property @{
 
 # Activation tab
 
+$actSystemPanel = New-SectionPanel 20 20 280 235 'Windows and Server' 'Quick activation choices for desktop and server editions.'
+$actOfficePanel = New-SectionPanel 320 20 280 235 'Office and Microsoft 365' 'Office, Visio, and Project options grouped together for easier comparison.'
+$actAppsPanel = New-SectionPanel 620 20 280 235 'Apps and launchers' 'Actions for third-party apps and game launchers.'
+$actSummaryPanel = New-SectionPanel 20 275 880 230 'Ready to run' 'Confirm the selected scenario before launch. The commands stay the same; only the presentation is refreshed.'
+
 $ActWin10 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
     Checked = $true
-    Location = [System.Drawing.Point]::new(6, 6)
+    Location = [System.Drawing.Point]::new(18, 78)
     Name = "Win10"
-    Size = [System.Drawing.Size]::new(143, 19)
     Text = "Windows 10/11 (HWID)"
 }
 $tooltip.SetToolTip($ActWin10, $strings.act.hwid)
+Set-RadioTheme $ActWin10
 
 $ActWinKM = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(6, 31)
+    Location = [System.Drawing.Point]::new(18, 108)
     Name = "WinKM"
-    Size = [System.Drawing.Size]::new(143, 19)
     Text = ("Windows 10/11 (KM" + "S)")
 }
 $tooltip.SetToolTip($ActWinKM, $strings.act.kms)
+Set-RadioTheme $ActWinKM
 
-$ConvertEvaluationToFull = New-Object System.Windows.Forms.RadioButton -Property @{ 
+$ConvertEvaluationToFull = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(6, 56)
+    Location = [System.Drawing.Point]::new(18, 138)
     Name = "ConvertEvaluationToFull"
-    Size = [System.Drawing.Size]::new(130, 19)
     Text = "LTSC Evaluation -> LTSC"
 }
 $tooltip.SetToolTip($ConvertEvaluationToFull, $strings.act.evaluation)
+Set-RadioTheme $ConvertEvaluationToFull
 
 $ActWinServer = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(6, 81)
+    Location = [System.Drawing.Point]::new(18, 168)
     Name = "WinServer"
-    Size = [System.Drawing.Size]::new(193, 19)
     Text = "Win Server 2025/2022/2019/2016"
 }
 $tooltip.SetToolTip($ActWinServer, $strings.act.server)
+Set-RadioTheme $ActWinServer
 
 $ActVisio = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(6, 106)
+    Location = [System.Drawing.Point]::new(18, 78)
     Name = "OfficeVisio"
-    Size = [System.Drawing.Size]::new(54, 19)
     Text = "Visio 2016/2019/2021"
 }
 $tooltip.SetToolTip($ActVisio, $strings.act.visio.Replace("%p%", "Visio"))
+Set-RadioTheme $ActVisio
 
 $ActProject = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(6, 131)
+    Location = [System.Drawing.Point]::new(18, 108)
     Name = "OfficeProject"
-    Size = [System.Drawing.Size]::new(64, 19)
     Text = "Project 2016/2019/2021"
 }
 $tooltip.SetToolTip($ActProject, $strings.act.visio.Replace("%p%", "Project"))
+Set-RadioTheme $ActProject
 
 $ActOffice365 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 6)
+    Location = [System.Drawing.Point]::new(18, 138)
     Name = "Office 365"
-    Size = [System.Drawing.Size]::new(79, 19)
     Text = "Office 365"
 }
 $tooltip.SetToolTip($ActOffice365, $strings.act.office.Replace("%v%", "365").Replace("%info%", $strings.act.o365info).Replace("%otherv%", "2016, 2019, 2021, 2024"))
+Set-RadioTheme $ActOffice365
 
 $ActOffice2024 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 31)
+    Location = [System.Drawing.Point]::new(18, 168)
     Name = "Office 2024"
-    Size = [System.Drawing.Size]::new(83, 19)
     Text = "Office 2024"
 }
 $tooltip.SetToolTip($ActOffice2024, $strings.act.office.Replace("%v%", "2024").Replace("%info%", $strings.act.o2024info).Replace("%otherv%", "2016, 2019, 2021"))
+Set-RadioTheme $ActOffice2024
 
 $ActOffice2021 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 56)
+    Location = [System.Drawing.Point]::new(140, 138)
     Name = "Office 2021"
-    Size = [System.Drawing.Size]::new(83, 19)
     Text = "Office 2021"
 }
 $tooltip.SetToolTip($ActOffice2021, $strings.act.office.Replace("%v%", "2021").Replace("%info%", "").Replace("%otherv%", "2016, 2019, 2024"))
+Set-RadioTheme $ActOffice2021
 
 $ActOffice2019 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 81)
+    Location = [System.Drawing.Point]::new(140, 168)
     Name = "Office 2019"
-    Size = [System.Drawing.Size]::new(84, 19)
     Text = "Office 2019"
 }
 $tooltip.SetToolTip($ActOffice2019, $strings.act.office.Replace("%v%", "2019").Replace("%info%", "").Replace("%otherv%", "2016, 2021, 2024"))
+Set-RadioTheme $ActOffice2019
 
 $ActOffice2016 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 106)
+    Location = [System.Drawing.Point]::new(18, 198)
     Name = "Office 2016"
-    Size = [System.Drawing.Size]::new(84, 19)
     Text = "Office 2016"
 }
 $tooltip.SetToolTip($ActOffice2016, $strings.act.office.Replace("%v%", "2016").Replace("%info%", "").Replace("%otherv%", "2019, 2021, 2024"))
+Set-RadioTheme $ActOffice2016
 
 $ActOffice2013 = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(214, 131)
+    Location = [System.Drawing.Point]::new(140, 198)
     Name = "Office 2013"
-    Size = [System.Drawing.Size]::new(83, 19)
     Text = "Office 2013"
 }
 $tooltip.SetToolTip($ActOffice2013, $strings.act.o2013)
+Set-RadioTheme $ActOffice2013
 
 $ActPrismLauncher = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(373, 6)
+    Location = [System.Drawing.Point]::new(18, 78)
     Name = "Prism Launcher"
-    Size = [System.Drawing.Size]::new(201, 19)
     Text = "Prism Launcher"
 }
 $tooltip.SetToolTip($ActPrismLauncher, $strings.act.prism)
+Set-RadioTheme $ActPrismLauncher
 
 $ActTL = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(373, 31)
+    Location = [System.Drawing.Point]::new(18, 108)
     Name = "TL"
-    Size = [System.Drawing.Size]::new(81, 19)
     Text = "TL"
 }
 $tooltip.SetToolTip($ActTL, $strings.act.tl)
+Set-RadioTheme $ActTL
 
 $ActMXT = New-Object System.Windows.Forms.RadioButton -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(373, 56)
+    Location = [System.Drawing.Point]::new(18, 138)
     Name = "MobaXterm"
-    Size = [System.Drawing.Size]::new(88, 19)
     Text = "MobaXterm"
 }
+Set-RadioTheme $ActMXT
 
-$Act = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(515, 169)
-    Size = [System.Drawing.Size]::new(96, 23)
-    Text = $strings.act.act
+$actSelectedLabel = New-Object System.Windows.Forms.Label -Property @{
+    AutoSize = $true
+    Location = [System.Drawing.Point]::new(18, 78)
+    Font = [System.Drawing.Font]::new('Segoe UI Semibold', 12)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
+    Text = ''
 }
 
+$actSummaryLabel = New-BodyLabel 18 108 660 78 '' 9 $theme.textMuted
+$actSummaryLabel.BackColor = $theme.surface
+
+$actHintLabel = New-BodyLabel 18 188 660 24 'When needed, the script will request elevation through UAC on its own.' 8.5 $theme.textSoft
+$actHintLabel.BackColor = $theme.surface
+
+$Act = New-Object System.Windows.Forms.Button -Property @{
+    Location = [System.Drawing.Point]::new(708, 160)
+    Size = [System.Drawing.Size]::new(150, 42)
+    Font = [System.Drawing.Font]::new('Segoe UI Semibold', 10)
+    Text = $strings.act.act
+}
+Set-ButtonTheme -Button $Act -Primary
+
+function Update-ActivationSummary {
+    $selected = Get-ActivationSelection
+    if ($null -eq $selected) { return }
+    $actSelectedLabel.Text = $selected.Text
+    $actSummaryLabel.Text = $tooltip.GetToolTip($selected)
+}
+
+function Get-ActivationSelection {
+    foreach ($panel in $ActTab.Controls) {
+        foreach ($control in $panel.Controls) {
+            if ($control -is [System.Windows.Forms.RadioButton] -and $control.Checked) {
+                return $control
+            }
+        }
+    }
+}
+
+@($ActWin10, $ActWinKM, $ConvertEvaluationToFull, $ActWinServer) | ForEach-Object { $actSystemPanel.Controls.Add($_) }
+@($ActVisio, $ActProject, $ActOffice365, $ActOffice2024, $ActOffice2021, $ActOffice2019, $ActOffice2016, $ActOffice2013) | ForEach-Object { $actOfficePanel.Controls.Add($_) }
+@($ActPrismLauncher, $ActTL, $ActMXT) | ForEach-Object { $actAppsPanel.Controls.Add($_) }
+@($actSelectedLabel, $actSummaryLabel, $actHintLabel, $Act) | ForEach-Object { $actSummaryPanel.Controls.Add($_) }
+
+@($ActWin10, $ActWinKM, $ConvertEvaluationToFull, $ActWinServer, $ActVisio, $ActProject, $ActOffice365, $ActOffice2024, $ActOffice2021, $ActOffice2019, $ActOffice2016, $ActOffice2013, $ActPrismLauncher, $ActTL, $ActMXT) | ForEach-Object {
+    $_.Add_CheckedChanged({
+        if ($this.Checked) {
+            Update-ActivationSummary
+        }
+    })
+}
+
+@($actSystemPanel, $actOfficePanel, $actAppsPanel, $actSummaryPanel) | ForEach-Object { $ActTab.Controls.Add($_) }
+Update-ActivationSummary
+
 $Act.Add_Click({
-    $prod = ($ActTab.Controls | Where-Object { $_.GetType() -eq [System.Windows.Forms.RadioButton] -and $_.Checked })[0].Name
+    $prod = (Get-ActivationSelection).Name
     switch ($prod) {
         "Prism Launcher" {
             if (!(check_path $paths[$prod] $prod)) {break}
@@ -483,186 +583,224 @@ $Act.Add_Click({
     }
 })
 
-@($ActWin10, $ActWinKM, $ConvertEvaluationToFull, $ActWinServer, $ActVisio, $ActProject, $ActOffice365, $ActOffice2024, $ActOffice2021, $ActOffice2019, $ActOffice2016, $ActOffice2013, $ActPrismLauncher, $ActTL, $ActMXT, $Act) | ForEach-Object { $ActTab.Controls.Add($_) }
-
 # Downloads tab
 
+$dlWindowsPanel = New-SectionPanel 20 20 280 250 'Windows' 'Fast access to current Windows builds and LTSC editions.'
+$dlServerPanel = New-SectionPanel 320 20 220 180 'Windows Server' 'Direct links to server ISO images.'
+$dlOfficePanel = New-SectionPanel 560 20 340 310 'Office' 'Online installers and ISO images placed side by side for faster comparison.'
+$dlExtrasPanel = New-SectionPanel 20 290 520 175 'Extras' 'Extras for media creation and standalone Visio and Project downloads.'
+$dlGuidePanel = New-SectionPanel 560 350 340 115 'Tip' 'Office online installers may require a regional bypass. The script will guide you after launch.'
+
 $DlWin10 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 6)
-    Size = [System.Drawing.Size]::new(83, 23)
+    Location = [System.Drawing.Point]::new(18, 78)
+    Size = [System.Drawing.Size]::new(240, 34)
     Text = "Windows 10"
 }
 $toolTip.SetToolTip($DlWin10, $strings.download.windows.Replace("%v%", "10"))
+Set-ButtonTheme $DlWin10
 
 $DlWin11 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 64)
-    Size = [System.Drawing.Size]::new(83, 23)
+    Location = [System.Drawing.Point]::new(18, 118)
+    Size = [System.Drawing.Size]::new(240, 34)
     Text = "Windows 11"
 }
 $toolTip.SetToolTip($DlWin11, $strings.download.windows.Replace("%v%", "11"))
+Set-ButtonTheme $DlWin11
 
 $DlWin10Ltsc = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 35)
-    Size = [System.Drawing.Size]::new(197, 23)
+    Location = [System.Drawing.Point]::new(18, 158)
+    Size = [System.Drawing.Size]::new(240, 34)
     Text = "Win 10 LTSC 2021 ($($strings.download.recommended))"
 }
+Set-ButtonTheme $DlWin10Ltsc
 
 $DlWin11Ltsc = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 93)
-    Size = [System.Drawing.Size]::new(136, 23)
+    Location = [System.Drawing.Point]::new(18, 198)
+    Size = [System.Drawing.Size]::new(240, 34)
     Text = "Windows 11 LTSC 2024"
 }
+Set-ButtonTheme $DlWin11Ltsc
 
 $DlServer2025 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(215, 6)
-    Size = [System.Drawing.Size]::new(136, 23)
+    Location = [System.Drawing.Point]::new(18, 78)
+    Size = [System.Drawing.Size]::new(180, 34)
     Text = "Windows Server 2025"
 }
+Set-ButtonTheme $DlServer2025
 
 $DlServer2022 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(215, 35)
-    Size = [System.Drawing.Size]::new(136, 23)
+    Location = [System.Drawing.Point]::new(18, 118)
+    Size = [System.Drawing.Size]::new(180, 34)
     Text = "Windows Server 2022"
 }
+Set-ButtonTheme $DlServer2022
 
 $DlServer2019 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(215, 64)
-    Size = [System.Drawing.Size]::new(136, 23)
+    Location = [System.Drawing.Point]::new(18, 158)
+    Size = [System.Drawing.Size]::new(180, 34)
     Text = "Windows Server 2019"
 }
+Set-ButtonTheme $DlServer2019
 
 $DlWin81 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 122)
-    Size = [System.Drawing.Size]::new(83, 23)
+    Location = [System.Drawing.Point]::new(18, 78)
+    Size = [System.Drawing.Size]::new(220, 34)
     Text = "Windows 8.1"
 }
+Set-ButtonTheme $DlWin81
 
 $DlOffice2024Installer = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(437, 7)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(190, 74)
+    Size = [System.Drawing.Size]::new(64, 30)
     Text = "Online"
 }
 $toolTip.SetToolTip($DlOffice2024Installer, $strings.download.oonline + $strings.download.installer)
+Set-ButtonTheme $DlOffice2024Installer
 
 $DlOffice2024ISO = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(522, 7)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(262, 74)
+    Size = [System.Drawing.Size]::new(56, 30)
     Text = "ISO"
 }
 $toolTip.SetToolTip($DlOffice2024ISO, $strings.download.oiso)
+Set-ButtonTheme $DlOffice2024ISO
 
 $DlOffice2021Installer = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(437, 36)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(190, 110)
+    Size = [System.Drawing.Size]::new(64, 30)
     Text = "Online"
 }
 $toolTip.SetToolTip($DlOffice2021Installer, $strings.download.oonline + $strings.download.installer)
+Set-ButtonTheme $DlOffice2021Installer
 
 $DlOffice2021ISO = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(522, 36)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(262, 110)
+    Size = [System.Drawing.Size]::new(56, 30)
     Text = "ISO"
 }
 $toolTip.SetToolTip($DlOffice2021ISO, $strings.download.oiso)
+Set-ButtonTheme $DlOffice2021ISO
 
 $DlOffice2019Installer = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(437, 65)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(190, 146)
+    Size = [System.Drawing.Size]::new(64, 30)
     Text = "Online"
 }
 $toolTip.SetToolTip($DlOffice2019Installer, $strings.download.oonline + $strings.download.installer)
+Set-ButtonTheme $DlOffice2019Installer
 
 $DlOffice2019ISO = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(522, 64)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(262, 146)
+    Size = [System.Drawing.Size]::new(56, 30)
     Text = "ISO"
 }
 $toolTip.SetToolTip($DlOffice2019ISO, $strings.download.oiso)
+Set-ButtonTheme $DlOffice2019ISO
 
 $DlOffice2016Installer = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(437, 93)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(190, 182)
+    Size = [System.Drawing.Size]::new(64, 30)
     Text = "Online"
 }
 $toolTip.SetToolTip($DlOffice2016Installer, $strings.download.oonline + $strings.download.installer)
+Set-ButtonTheme $DlOffice2016Installer
 
 $DlOffice2016ISO = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(522, 93)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(262, 182)
+    Size = [System.Drawing.Size]::new(56, 30)
     Text = "ISO"
 }
 $toolTip.SetToolTip($DlOffice2016ISO, $strings.download.oiso)
+Set-ButtonTheme $DlOffice2016ISO
 
 $DlOffice2013Installer = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(437, 122)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(190, 218)
+    Size = [System.Drawing.Size]::new(64, 30)
     Text = "Online"
 }
 $toolTip.SetToolTip($DlOffice2013Installer, $strings.download.outdated + $strings.download.oonline)
+Set-ButtonTheme $DlOffice2013Installer
 
 $DlOffice2013ISO = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(522, 121)
-    Size = [System.Drawing.Size]::new(68, 23)
+    Location = [System.Drawing.Point]::new(262, 218)
+    Size = [System.Drawing.Size]::new(56, 30)
     Text = "ISO"
 }
 $toolTip.SetToolTip($DlOffice2013ISO, $strings.download.outdated + $strings.download.oiso)
+Set-ButtonTheme $DlOffice2013ISO
 
 $l24 = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(362, 11)
-    Size = [System.Drawing.Size]::new(70, 15)
+    Location = [System.Drawing.Point]::new(18, 81)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
     Text = "Office 2024:"
 }
 
 $l21 = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(362, 39)
-    Size = [System.Drawing.Size]::new(70, 15)
+    Location = [System.Drawing.Point]::new(18, 117)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
     Text = "Office 2021:"
 }
 
 $l19 = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(362, 68)
-    Size = [System.Drawing.Size]::new(70, 15)
+    Location = [System.Drawing.Point]::new(18, 153)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
     Text = "Office 2019:"
 }
 
 $l16 = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(362, 97)
-    Size = [System.Drawing.Size]::new(70, 15)
+    Location = [System.Drawing.Point]::new(18, 189)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
     Text = "Office 2016:"
 }
 
 $l13 = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(362, 126)
-    Size = [System.Drawing.Size]::new(70, 15)
+    Location = [System.Drawing.Point]::new(18, 225)
+    ForeColor = $theme.text
+    BackColor = $theme.surface
     Text = "Office 2013:"
 }
 
 $rufus = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 151)
-    Size = [System.Drawing.Size]::new(312, 23)
-    Text = "Rufus — " + $strings.download.rufus
+    Location = [System.Drawing.Point]::new(18, 78)
+    Size = [System.Drawing.Size]::new(470, 34)
+    Text = "Rufus - " + $strings.download.rufus
 }
+Set-ButtonTheme $rufus
 
 $DlVisio2024 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(400, 151)
-    Size = [System.Drawing.Size]::new(90, 23)
+    Location = [System.Drawing.Point]::new(18, 118)
+    Size = [System.Drawing.Size]::new(220, 34)
     Text = "Visio 2024 ISO"
 }
 $toolTip.SetToolTip($DlVisio2024, $strings.download.oiso)
+Set-ButtonTheme $DlVisio2024
 
 $DlProject2024 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(500, 151)
-    Size = [System.Drawing.Size]::new(100, 23)
+    Location = [System.Drawing.Point]::new(268, 118)
+    Size = [System.Drawing.Size]::new(220, 34)
     Text = "Project 2024 ISO"
 }
 $toolTip.SetToolTip($DlProject2024, $strings.download.oiso)
+Set-ButtonTheme $DlProject2024
 
-@($DlWin10, $DlWin11, $DlWin10Ltsc, $DlWin11Ltsc, $DlServer2025, $DlServer2022, $DlServer2019, $DlWin81, $DlOffice2024Installer, $DlOffice2024ISO, $DlOffice2021Installer, $DlOffice2021ISO, $DlOffice2019Installer, $DlOffice2019ISO, $DlOffice2016Installer, $DlOffice2016ISO, $DlOffice2013Installer, $DlOffice2013ISO, $l24, $l21, $l19, $l16, $l13, $rufus, $DlVisio2024, $DlProject2024) | ForEach-Object { $DlTab.Controls.Add($_) }
+@($DlWin10, $DlWin11, $DlWin10Ltsc, $DlWin11Ltsc) | ForEach-Object { $dlWindowsPanel.Controls.Add($_) }
+@($DlServer2025, $DlServer2022, $DlServer2019) | ForEach-Object { $dlServerPanel.Controls.Add($_) }
+@($DlOffice2024Installer, $DlOffice2024ISO, $DlOffice2021Installer, $DlOffice2021ISO, $DlOffice2019Installer, $DlOffice2019ISO, $DlOffice2016Installer, $DlOffice2016ISO, $DlOffice2013Installer, $DlOffice2013ISO, $l24, $l21, $l19, $l16, $l13) | ForEach-Object { $dlOfficePanel.Controls.Add($_) }
+@($DlWin81, $rufus, $DlVisio2024, $DlProject2024) | ForEach-Object { $dlExtrasPanel.Controls.Add($_) }
+$dlGuideText = New-BodyLabel 18 74 300 26 'Need a direct image? Choose ISO. Installing over an existing setup? Start with Online.' 8.5 $theme.textMuted
+$dlGuideText.BackColor = $theme.surface
+$dlGuidePanel.Controls.Add($dlGuideText)
+
+@($dlWindowsPanel, $dlServerPanel, $dlOfficePanel, $dlExtrasPanel, $dlGuidePanel) | ForEach-Object { $DlTab.Controls.Add($_) }
 
 function bypass_office_geoblock {
     $result = $mb.Invoke($hidden, $strings.download.bypass, $app, "YesNo", "Information")
@@ -681,6 +819,8 @@ function Show-LinkFailDialog {
         TopMost = $true
         AutoSize = $true
         AutoSizeMode = "GrowAndShrink"
+        BackColor = $theme.formBack
+        Font = [System.Drawing.Font]::new('Segoe UI', 9)
     }
 
     $tablePanel = New-Object System.Windows.Forms.TableLayoutPanel -Property @{
@@ -689,12 +829,15 @@ function Show-LinkFailDialog {
         ColumnCount = 1
         RowCount = 2
         Padding = New-Object System.Windows.Forms.Padding(10)
+        BackColor = $theme.formBack
     }
 
     $label = New-Object System.Windows.Forms.Label -Property @{
         Text = $strings.download.linkfail
         AutoSize = $true
         Padding = New-Object System.Windows.Forms.Padding(0, 0, 0, 10)
+        ForeColor = $theme.text
+        BackColor = $theme.formBack
     }
     $tablePanel.Controls.Add($label, 0, 0)
 
@@ -702,6 +845,7 @@ function Show-LinkFailDialog {
         AutoSize = $true
         AutoSizeMode = "GrowAndShrink"
         WrapContents = $false
+        BackColor = $theme.formBack
     }
 
     $btnRetry = New-Object System.Windows.Forms.Button -Property @{
@@ -726,6 +870,10 @@ function Show-LinkFailDialog {
         DialogResult = [System.Windows.Forms.DialogResult]::Cancel
     }
 
+    Set-ButtonTheme $btnRetry
+    Set-ButtonTheme $btnReupload
+    Set-ButtonTheme $btnCancel
+
     $btnPanel.Controls.AddRange(@($btnRetry, $btnReupload, $btnCancel))
     $tablePanel.Controls.Add($btnPanel, 0, 1)
     $form.Controls.Add($tablePanel)
@@ -736,7 +884,8 @@ function Show-LinkFailDialog {
 $DlWin10.Add_Click({
     try {
         $products = Invoke-RestMethod "https://raw.githubusercontent.com/ImMALWARE/$app/main/windl.json"
-        $response = Invoke-RestMethod "https://api.gravesoft.dev/msdl/proxy?product_id=$($products."10"[0])&sku_id=$($products."10"[1 + ($PSUICulture -ne "ru-RU")])"
+        $url = 'https://api.gravesoft.dev/msdl/proxy?product_id={0}&sku_id={1}' -f $products.'10'[0], $products.'10'[1 + ($PSUICulture -ne "ru-RU")]
+        $response = Invoke-RestMethod $url
         Start-Process $response.ProductDownloadOptions[$response.ProductDownloadOptions.Count - 1].Uri
     } catch {
         $result = Show-LinkFailDialog
@@ -749,7 +898,8 @@ $DlWin10.Add_Click({
 $DlWin11.Add_Click({
     try {
         $products = Invoke-RestMethod "https://raw.githubusercontent.com/ImMALWARE/$app/main/windl.json"
-        Start-Process (Invoke-RestMethod "https://api.gravesoft.dev/msdl/proxy?product_id=$($products."11"[0])&sku_id=$($products."11"[1 + ($PSUICulture -ne "ru-RU")])").ProductDownloadOptions[0].Uri
+        $url = 'https://api.gravesoft.dev/msdl/proxy?product_id={0}&sku_id={1}' -f $products.'11'[0], $products.'11'[1 + ($PSUICulture -ne "ru-RU")]
+        Start-Process (Invoke-RestMethod $url).ProductDownloadOptions[0].Uri
     } catch {
         $result = Show-LinkFailDialog
         if ($result -eq [System.Windows.Forms.DialogResult]::Retry) {
@@ -843,82 +993,99 @@ $DlProject2024.Add_Click({
 
 #########
 
+$fnQuickPanel = New-SectionPanel 20 20 430 190 'Quick actions' 'Everyday tools you will likely want first.'
+$fnDriversPanel = New-SectionPanel 470 20 430 190 'Drivers' 'Backup and restore helpers for reinstall workflows.'
+$fnMaintenancePanel = New-SectionPanel 20 230 880 235 'System and maintenance' 'Cleanup, tweaks, and network workarounds stay unchanged, now grouped more cleanly.'
+
 $winwifipassman = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(6, 6)
-    Size = [System.Drawing.Size]::new(251, 23)
+    Location = [System.Drawing.Point]::new(18, 78)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.wifi
 }
 $tooltip.SetToolTip($winwifipassman, $strings.functions.wifi_desc)
+Set-ButtonTheme $winwifipassman
 
 $explorerext = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(263, 6)
-    Size = [System.Drawing.Size]::new(274, 23)
+    Location = [System.Drawing.Point]::new(219, 78)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.fileext
 }
+Set-ButtonTheme $explorerext
 
 $winget = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 35)
-    Size = [System.Drawing.Size]::new(113, 23)
+    Location = [System.Drawing.Point]::new(18, 122)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.install + "winget"
 }
+Set-ButtonTheme $winget
 
 $store = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(127, 35)
-    Size = [System.Drawing.Size]::new(160, 23)
+    Location = [System.Drawing.Point]::new(219, 122)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.install + "Microsoft Store"
 }
 $tooltip.SetToolTip($store, $strings.functions.store_desc)
+Set-ButtonTheme $store
 
 $driversbackup = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 64)
-    Size = [System.Drawing.Size]::new(208, 23)
+    Location = [System.Drawing.Point]::new(18, 90)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.drivers
 }
 $tooltip.SetToolTip($driversbackup, $strings.functions.drivers_desc)
+Set-ButtonTheme $driversbackup
 
 $driversrestore = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(222, 64)
-    Size = [System.Drawing.Size]::new(165, 23)
+    Location = [System.Drawing.Point]::new(219, 90)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.functions.drivers_restore
 }
 $tooltip.SetToolTip($driversrestore, $strings.functions.drivers_desc)
+Set-ButtonTheme $driversrestore
 
 $edgeuninstall = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 93)
-    Size = [System.Drawing.Size]::new(208, 23)
+    Location = [System.Drawing.Point]::new(18, 84)
+    Size = [System.Drawing.Size]::new(270, 34)
     Text = $strings.functions.edge
 }
+Set-ButtonTheme $edgeuninstall
 
 $delspyfiles = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(222, 93)
-    Size = [System.Drawing.Size]::new(245, 23)
+    Location = [System.Drawing.Point]::new(304, 84)
+    Size = [System.Drawing.Size]::new(270, 34)
     Text = $strings.functions.compattel
 }
 $tooltip.SetToolTip($delspyfiles, $strings.functions.compattel_desc)
+Set-ButtonTheme $delspyfiles
 
 $spicetify = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 122)
-    Size = [System.Drawing.Size]::new(135, 23)
+    Location = [System.Drawing.Point]::new(590, 84)
+    Size = [System.Drawing.Size]::new(270, 34)
     Text = $strings.functions.install + "Spicetify"
 }
 $tooltip.SetToolTip($spicetify, $strings.functions.spicetify_desc)
+Set-ButtonTheme $spicetify
 
 $edit_hosts = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(149, 122)
-    Size = [System.Drawing.Size]::new(190, 23)
+    Location = [System.Drawing.Point]::new(18, 128)
+    Size = [System.Drawing.Size]::new(270, 34)
     Text = $strings.functions.hosts
 }
 $tooltip.SetToolTip($edit_hosts, $strings.functions.hosts_desc)
+Set-ButtonTheme $edit_hosts
 
-@($winwifipassman, $winget, $store, $driversbackup, $driversrestore, $edgeuninstall, $spicetify, $edit_hosts) | ForEach-Object { $FunctionsTab.Controls.Add($_) }
+@($winwifipassman, $winget, $store) | ForEach-Object { $fnQuickPanel.Controls.Add($_) }
+@($driversbackup, $driversrestore) | ForEach-Object { $fnDriversPanel.Controls.Add($_) }
+@($edgeuninstall, $spicetify, $edit_hosts) | ForEach-Object { $fnMaintenancePanel.Controls.Add($_) }
+@($fnQuickPanel, $fnDriversPanel, $fnMaintenancePanel) | ForEach-Object { $FunctionsTab.Controls.Add($_) }
 
 $val = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "HideFileExt" -ErrorAction SilentlyContinue
 if (!$val -or $val.HideFileExt -ne 0) {
-    $FunctionsTab.Controls.Add($explorerext)
+    $fnQuickPanel.Controls.Add($explorerext)
 }
 
 if ((Test-Path "$env:SystemRoot\System32\CompatTelRunner.exe") -or (Test-Path "$env:SystemRoot\System32\wsqmcons.exe")) {
-    $FunctionsTab.Controls.Add($delspyfiles)
+    $fnMaintenancePanel.Controls.Add($delspyfiles)
 }
 
 $winwifipassman.Add_Click({
@@ -951,7 +1118,7 @@ $driversbackup.Add_Click({
         RootFolder = [System.Environment+SpecialFolder]::MyComputer
     }
     if ($dialog.ShowDialog() -eq 'OK') {
-        Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app — $($strings.functions.drivers)'; pnputil /export-driver * '$($dialog.SelectedPath)'; pause" -Verb RunAs
+        Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app - $($strings.functions.drivers)'; pnputil /export-driver * '$($dialog.SelectedPath)'; pause" -Verb RunAs
     }
 })
 
@@ -961,7 +1128,7 @@ $driversrestore.Add_Click({
         RootFolder = [System.Environment+SpecialFolder]::MyComputer
     }
     if ($dialog.ShowDialog() -eq 'OK') {
-        Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app — $($strings.functions.drivers_restore)'; pnputil /add-driver '$($dialog.SelectedPath)\*' /subdirs /install; pause" -Verb RunAs
+        Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app - $($strings.functions.drivers_restore)'; pnputil /add-driver '$($dialog.SelectedPath)\*' /subdirs /install; pause" -Verb RunAs
     }
 })
 
@@ -974,7 +1141,7 @@ $edgeuninstall.Add_Click({
 
 $delspyfiles.Add_Click({
     Start-Process powershell -ArgumentList @"
-    `$host.UI.RawUI.WindowTitle = '$app — $($strings.functions.compattel_title)'
+    `$host.UI.RawUI.WindowTitle = '$app - $($strings.functions.compattel_title)'
     cd '$env:SystemRoot\System32'
     .\takeown.exe /f CompatTelRunner.exe /a
     .\takeown.exe /f wsqmcons.exe /a
@@ -994,7 +1161,7 @@ $spicetify.Add_Click({
 
 $edit_hosts.Add_Click({
     Start-Process powershell -ArgumentList @"
-        `$host.UI.RawUI.WindowTitle = '$app — $($strings.functions.hosts_title)'
+        `$host.UI.RawUI.WindowTitle = '$app - $($strings.functions.hosts_title)'
         `$current_hosts = Get-Content -Path 'C:\Windows\System32\drivers\etc\hosts' -Raw
         `$new_hosts = irm https://raw.githubusercontent.com/ImMALWARE/dns.malw.link/master/hosts
         `$start_marker = '### dns.malw.link: hosts file'
@@ -1016,62 +1183,62 @@ $edit_hosts.Add_Click({
 
 #######
 
-$images = @{
-    oimg   = @{url = 'https://i.imgur.com/8L2KS9a.png'; y = 8}
-    winimg = @{url = 'https://i.imgur.com/sYPcWTh.png'; y = 71}
-}
-
-$images.Keys | ForEach-Object {
-    $name = $_
-    Set-Variable -Name $name -Value (New-Object System.Windows.Forms.PictureBox -Property @{
-        Location = [System.Drawing.Point]::new(8, $images[$name].y)
-        Size = [System.Drawing.Size]::new(34, 39)
-        Image = [System.Drawing.Image]::FromStream(
-            ([System.Net.WebRequest]::Create($images[$name].url)).GetResponse().GetResponseStream()
-        )
-    })
-}
+$problemOfficePanel = New-SectionPanel 20 20 430 180 'Office' 'Licenses, uninstall flow, and Office16 folder recovery.'
+$problemWindowsPanel = New-SectionPanel 470 20 430 180 'Windows' 'Reset KMS and run the standard system integrity checks.'
+$problemSupportPanel = New-SectionPanel 20 220 880 180 'Need help' 'If none of these flows fit, jump straight to the support links and report details.'
 
 $clear_office16 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(48, 8)
-    Size = [System.Drawing.Size]::new(170, 23)
+    Location = [System.Drawing.Point]::new(18, 82)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.problems.cl_o16
 }
 $tooltip.SetToolTip($clear_office16, $strings.problems.cl_o16_desc)
+Set-ButtonTheme $clear_office16
 
 $office_uninstall = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(221, 8)
-    Size = [System.Drawing.Size]::new(176, 23)
+    Location = [System.Drawing.Point]::new(221, 82)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.problems.ouninstall
 }
+Set-ButtonTheme $office_uninstall
 
 $office16_folder = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(403, 8)
-    Size = [System.Drawing.Size]::new(160, 23)
+    Location = [System.Drawing.Point]::new(18, 126)
+    Size = [System.Drawing.Size]::new(388, 34)
     Text = $strings.problems.o16_folder
 }
+Set-ButtonTheme $office16_folder
 
 $clear_winkms = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(48, 71)
-    Size = [System.Drawing.Size]::new(192, 23)
+    Location = [System.Drawing.Point]::new(18, 82)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.problems.cl_win
 }
+Set-ButtonTheme $clear_winkms
 
 $sfc_scannow = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(247, 71)
-    Size = [System.Drawing.Size]::new(260, 23)
+    Location = [System.Drawing.Point]::new(221, 82)
+    Size = [System.Drawing.Size]::new(185, 34)
     Text = $strings.problems.sfc
 }
 $tooltip.SetToolTip($sfc_scannow, "sfc /scannow, DISM /Online /Cleanup-Image /RestoreHealth, chkdsk /b /x")
+Set-ButtonTheme $sfc_scannow
 
 $otherproblem = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 165)
-    Size = [System.Drawing.Size]::new(154, 23)
+    Location = [System.Drawing.Point]::new(18, 110)
+    Size = [System.Drawing.Size]::new(180, 34)
     Text = $strings.problems.other
 }
 $tooltip.SetToolTip($otherproblem, $strings.problems.other_desc)
+Set-ButtonTheme -Button $otherproblem -Primary
 
-@($winimg, $oimg, $clear_office16, $office_uninstall, $office16_folder, $clear_winkms, $sfc_scannow, $otherproblem) | ForEach-Object { $ProblemsTab.Controls.Add($_) }
+$problemSupportText = New-BodyLabel 18 78 620 24 $strings.problems.other_desc 9 $theme.textMuted
+$problemSupportText.BackColor = $theme.surface
+
+@($clear_office16, $office_uninstall, $office16_folder) | ForEach-Object { $problemOfficePanel.Controls.Add($_) }
+@($clear_winkms, $sfc_scannow) | ForEach-Object { $problemWindowsPanel.Controls.Add($_) }
+@($problemSupportText, $otherproblem) | ForEach-Object { $problemSupportPanel.Controls.Add($_) }
+@($problemOfficePanel, $problemWindowsPanel, $problemSupportPanel) | ForEach-Object { $ProblemsTab.Controls.Add($_) }
 
 $clear_office16.Add_Click({
     if (test-path "$env:ProgramFiles\Microsoft Office\Office16\ospp.vbs"){
@@ -1085,7 +1252,7 @@ $clear_office16.Add_Click({
         exit
     }
     Start-Process powershell -ArgumentList @"
-    `$host.ui.RawUI.WindowTitle = '$app — $($strings.problems.cl_o16_title)'
+    `$host.ui.RawUI.WindowTitle = '$app - $($strings.problems.cl_o16_title)'
     cd '$path'
     while(`$true){
         `$license = (cscript ospp.vbs /dstatus) | Out-String
@@ -1119,7 +1286,7 @@ $office16_folder.Add_Click({
         if (!(Test-Path "$env:ProgramFiles\Microsoft Office\Office16")) {
             New-Item -Path "$env:temp\$app" -ItemType Directory -ErrorAction SilentlyContinue> $null
             $wc.DownloadFile('https://archive.org/download/office16_202502/Office16.zip', "$env:temp\$app\Office16.zip")
-            Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app — $($strings.problems.o16_title)'; New-Item -Path '$env:ProgramFiles\Microsoft Office\Office16' -ItemType Directory; Set-Location '$env:temp\$app'; Expand-Archive .\Office16.zip -DestinationPath '$env:ProgramFiles\Microsoft Office\Office16'" -Verb RunAs -Wait
+            Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app - $($strings.problems.o16_title)'; New-Item -Path '$env:ProgramFiles\Microsoft Office\Office16' -ItemType Directory; Set-Location '$env:temp\$app'; Expand-Archive .\Office16.zip -DestinationPath '$env:ProgramFiles\Microsoft Office\Office16'" -Verb RunAs -Wait
             $mb.Invoke("OK", $app, "OK", "Information")
         } else {
             $mb.Invoke($strings.problems.o16_exists, $app, "OK", "Information")
@@ -1130,11 +1297,11 @@ $office16_folder.Add_Click({
 })
 
 $clear_winkms.Add_Click({
-    Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app — $($strings.problems.cl_win_title)'; Set-Location $env:SystemRoot\System32; .\slmgr /upk; .\slmgr /cpky" -Verb RunAs
+    Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app - $($strings.problems.cl_win_title)'; Set-Location $env:SystemRoot\System32; .\slmgr /upk; .\slmgr /cpky" -Verb RunAs
 })
 
 $sfc_scannow.Add_Click({
-    Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app — $($strings.problems.sfc_title)'; Set-Location $env:SystemRoot\System32; .\sfc /scannow; .\Dism /Online /Cleanup-Image /RestoreHealth; Write-Host '$($strings.problems.sfc_note)' .\chkdsk ${(Get-WmiObject Win32_OperatingSystem).SystemDrive} /b /x; .\shutdown /r /t 60 /c '$($strings.problems.sfc_shutdown_desc)'; pause" -Verb RunAs
+    Start-Process powershell -ArgumentList "`$host.UI.RawUI.WindowTitle = '$app - $($strings.problems.sfc_title)'; Set-Location $env:SystemRoot\System32; .\sfc /scannow; .\Dism /Online /Cleanup-Image /RestoreHealth; Write-Host '$($strings.problems.sfc_note)' .\chkdsk ${(Get-WmiObject Win32_OperatingSystem).SystemDrive} /b /x; .\shutdown /r /t 60 /c '$($strings.problems.sfc_shutdown_desc)'; pause" -Verb RunAs
 })
 
 $otherproblem.Add_Click({
@@ -1143,57 +1310,71 @@ $otherproblem.Add_Click({
 
 ######
 
+$infoOverviewPanel = New-SectionPanel 20 20 400 180 "$app 2.0" 'Core project links collected in one place.'
+$infoSupportPanel = New-SectionPanel 440 20 460 180 'Support' 'If something goes sideways, jump straight to chat or open an issue here.'
+
 $malwtool = New-Object System.Windows.Forms.Label -Property @{
     AutoSize = $true
-    Location = [System.Drawing.Point]::new(8, 5)
-    Size = [System.Drawing.Size]::new(102, 15)
+    Location = [System.Drawing.Point]::new(18, 82)
+    Font = [System.Drawing.Font]::new('Segoe UI', 9)
+    ForeColor = $theme.textMuted
+    BackColor = $theme.surface
     Text = "$app 2.0"
 }
 
 $wiki = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 30)
-    Size = [System.Drawing.Size]::new(109, 23)
+    Location = [System.Drawing.Point]::new(18, 116)
+    Size = [System.Drawing.Size]::new(110, 34)
     Text = $strings.info.wiki
 }
+Set-ButtonTheme $wiki
 
 $lolzteam = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(123, 30)
-    Size = [System.Drawing.Size]::new(109, 23)
+    Location = [System.Drawing.Point]::new(144, 116)
+    Size = [System.Drawing.Size]::new(110, 34)
     Text = $strings.info.lolz
 }
+Set-ButtonTheme $lolzteam
 
 $github = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(238, 30)
-    Size = [System.Drawing.Size]::new(56, 23)
+    Location = [System.Drawing.Point]::new(270, 116)
+    Size = [System.Drawing.Size]::new(110, 34)
     Text = "GitHub"
 }
+Set-ButtonTheme $github
 
 $questions = New-Object System.Windows.Forms.Label -Property @{
-    AutoSize = $true
-    Location = [System.Drawing.Point]::new(8, 91)
-    Size = [System.Drawing.Size]::new(86, 15)
+    Location = [System.Drawing.Point]::new(18, 82)
+    Size = [System.Drawing.Size]::new(400, 24)
+    ForeColor = $theme.textMuted
+    BackColor = $theme.surface
     Text = $strings.info.questions + $strings.problems.other_desc
 }
 
 $telegram = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(8, 115)
-    Size = [System.Drawing.Size]::new(124, 23)
+    Location = [System.Drawing.Point]::new(18, 116)
+    Size = [System.Drawing.Size]::new(130, 34)
     Text = $strings.info.telegram
 }
+Set-ButtonTheme -Button $telegram -Primary
 
 $lolzteam2 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(138, 115)
-    Size = [System.Drawing.Size]::new(156, 23)
+    Location = [System.Drawing.Point]::new(164, 116)
+    Size = [System.Drawing.Size]::new(140, 34)
     Text = $strings.info.lolz_write
 }
+Set-ButtonTheme $lolzteam2
 
 $github2 = New-Object System.Windows.Forms.Button -Property @{
-    Location = [System.Drawing.Point]::new(300, 115)
-    Size = [System.Drawing.Size]::new(156, 23)
+    Location = [System.Drawing.Point]::new(320, 116)
+    Size = [System.Drawing.Size]::new(120, 34)
     Text = $strings.info.github
 }
+Set-ButtonTheme $github2
 
-@($malwtool, $wiki, $lolzteam, $github, $questions, $telegram, $lolzteam2, $github2) | ForEach-Object { $InfoTab.Controls.Add($_) }
+@($malwtool, $wiki, $lolzteam, $github) | ForEach-Object { $infoOverviewPanel.Controls.Add($_) }
+@($questions, $telegram, $lolzteam2, $github2) | ForEach-Object { $infoSupportPanel.Controls.Add($_) }
+@($infoOverviewPanel, $infoSupportPanel) | ForEach-Object { $InfoTab.Controls.Add($_) }
 
 $wiki.Add_Click({
     Start-Process "https://wiki.malw.link/apps/malwtool"
@@ -1219,5 +1400,6 @@ $github2.Add_Click({
     Start-Process "https://github.com/ImMALWARE/$app/issues/new"
 })
 
+$form.Controls.Add($headerPanel)
 $form.Controls.Add($tabs)
 $form.ShowDialog()
